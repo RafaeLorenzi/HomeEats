@@ -2,6 +2,7 @@ package com.delivery.homeeats.api.controller;
 
 import java.net.http.HttpHeaders;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,22 +37,23 @@ public class KitchenController {
 	
 	@GetMapping
 	public List<Kitchen> kitchenList(){
-		return kitchenRepository.list();
+		return kitchenRepository.findAll();
 		
 	}
 	
 	
 	@GetMapping("/{kitchenId}")
 	public ResponseEntity<Kitchen> findById(@PathVariable Long kitchenId) {
-		Kitchen kitchen = kitchenRepository.findById(kitchenId);
+		Optional<Kitchen> kitchen = kitchenRepository.findById(kitchenId);
 		
-		if(kitchen != null) {
-			return ResponseEntity.ok(kitchen);
+		if(kitchen.isPresent()) {
+			return ResponseEntity.ok(kitchen.get());
 		}
 		
 		return ResponseEntity.notFound().build();
 		  	
 	}
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Kitchen addKitchen(@RequestBody Kitchen kitchen) {
@@ -61,14 +63,14 @@ public class KitchenController {
 	@PutMapping("/{kitchenId}")
 	public ResponseEntity<Kitchen> updateKitchen(@PathVariable Long kitchenId, 
 			@RequestBody Kitchen kitchen){
-		Kitchen actualKitchen = kitchenRepository.findById(kitchenId);
+		Optional<Kitchen> actualKitchen = kitchenRepository.findById(kitchenId);
 		
-		if(actualKitchen != null) {
-		BeanUtils.copyProperties(kitchen, actualKitchen, "id");
+		if(actualKitchen.isPresent()) {
+		BeanUtils.copyProperties(kitchen, actualKitchen.get(), "id");
 		
-		actualKitchen = kitchenRegistrationService.addKitchen(actualKitchen);
+		Kitchen kitchenSaved = kitchenRegistrationService.addKitchen(actualKitchen.get());
 		
-		return ResponseEntity.ok(actualKitchen);
+		return ResponseEntity.ok(kitchenSaved);
 		}
 		
 		return ResponseEntity.notFound().build();

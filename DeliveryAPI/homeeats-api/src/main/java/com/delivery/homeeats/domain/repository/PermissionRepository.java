@@ -1,15 +1,11 @@
 package com.delivery.homeeats.domain.repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.delivery.homeeats.domain.model.Permission;
 
-public interface PermissionRepository {
-	
-	List<Permission> list();
-	Permission findById(Long Id);
-	Permission add(Permission permission);
-	void remove(Permission permission);
-	
+@Repository
+public interface PermissionRepository extends JpaRepository<Permission, Long> {
 
 }

@@ -2,13 +2,14 @@ package com.delivery.homeeats.domain.repository;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import com.delivery.homeeats.domain.model.District;
 
-public interface DistrictRepository {
+@Repository
+public interface DistrictRepository  extends JpaRepository<District, Long>{
 	
-	List<District> list();
-	District findById(Long id);
-	District add(District district);
-	void remove(District district);
+	
 
 }
