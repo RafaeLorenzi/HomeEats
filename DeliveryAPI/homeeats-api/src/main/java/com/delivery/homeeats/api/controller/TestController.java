@@ -18,9 +18,9 @@ public class TestController {
 	@Autowired
 	private KitchenRepository kitchenRepository;
 	
-//	@GetMapping("/kitchens/by-name")
-//	public List<Kitchen> kitchenByName(@RequestParam("name") String name){
-//		return kitchenRepository.listByName(name);
-//	}
+	@GetMapping("/kitchens/by-name")
+	public List<Kitchen> kitchenByName(@RequestParam("name") String name){
+		return kitchenRepository.findByname(name);
+	}
 
 }
