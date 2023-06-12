@@ -12,7 +12,7 @@ import com.delivery.homeeats.domain.model.Kitchen;
 @Repository
 public interface KitchenRepository extends JpaRepository<Kitchen, Long> {
 	
-	List<Kitchen> findByname(String name);
+	List<Kitchen> findByNameContaining(String name);
 		
 
 }
