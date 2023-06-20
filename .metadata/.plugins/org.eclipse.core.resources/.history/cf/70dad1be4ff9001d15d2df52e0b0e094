@@ -1,5 +1,0 @@
-spring.datasource.url=
-spring.datasource.username=root
-spring.datasource.password=rafa3105
-
-spring.jpa.show-sql=true

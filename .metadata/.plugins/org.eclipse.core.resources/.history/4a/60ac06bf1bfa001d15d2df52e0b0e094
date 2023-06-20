@@ -1,5 +1,0 @@
-package com.lorenzi.logistic.domain.exception;
-
-public class EntityNotFoundException {
-
-}
