@@ -1,6 +1,7 @@
 package com.delivery.homeeats.api.controller;
 
 import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,12 @@ import com.delivery.homeeats.domain.model.Restaurant;
 import com.delivery.homeeats.domain.repository.KitchenRepository;
 import com.delivery.homeeats.domain.repository.RestaurantRepository;
 import com.delivery.homeeats.infrastructure.repository.RestaurantRepositoryImpl;
+import com.delivery.homeeats.infrastructure.repository.spec.FreeFeeRestaurant;
+import com.delivery.homeeats.infrastructure.repository.spec.RestaurantByName;
+
+
+
+
 
 @RestController
 @RequestMapping("/test")
@@ -65,5 +72,15 @@ public class TestController {
 	@GetMapping("/restaurants/by-name-and-fee")
 	public List<Restaurant> restaurantByNameFee(String name, BigDecimal inicialFee, BigDecimal finalFee){
 		return restaurantRepository.find(name, inicialFee, finalFee);
+	}
+	
+	@GetMapping("/restaurant/with-free-fee")
+	public List<Restaurant> freeFeeRestaurants(String name){
+		var freeFee = new FreeFeeRestaurant();
+		var similiarName = new RestaurantByName(name);
+		
+		return restaurantRepository.findAll(freeFee.and(similiarName));
+		
+		
 	}
 }
