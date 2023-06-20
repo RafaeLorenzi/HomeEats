@@ -1,5 +1,8 @@
 package com.delivery.homeeats.api.controller;
 
+import static com.delivery.homeeats.infrastructure.repository.spec.RestaurantSpecs.withFreeFee;
+import static com.delivery.homeeats.infrastructure.repository.spec.RestaurantSpecs.withSimilarName;
+
 import java.math.BigDecimal;
 
 import java.util.List;
@@ -47,13 +50,20 @@ public class TestController {
 	
 	
 	@GetMapping("/restaurants/by-delivery-fee")
-	public List<Restaurant> findByDeliveryFeeBetween (BigDecimal InicialFee, BigDecimal finalFee){
+	public List<Restaurant> findByDeliveryFeeBetween (BigDecimal InicialFee
+			, BigDecimal finalFee){
+		
 		return restaurantRepository.findByDeliveryFeeBetween(InicialFee, finalFee);	
 	}
+	
 	@GetMapping("/restaurants/by-kitchen")
-	public List<Restaurant> findByKitchen (String name, Long kitchenId){
+	public List<Restaurant> findByKitchen (String name
+			, Long kitchenId){
+		
 		return restaurantRepository.consultRestaurantsByName ( name,  kitchenId);	
 	}
+	
+	
 	@GetMapping("/restaurants/first-by-name")
 	public 	Optional<Restaurant> firstRestaurantByName(String name){
 		return restaurantRepository.findFirstRestaurantByNameContaining(name);
@@ -70,16 +80,18 @@ public class TestController {
 	}
 	
 	@GetMapping("/restaurants/by-name-and-fee")
-	public List<Restaurant> restaurantByNameFee(String name, BigDecimal inicialFee, BigDecimal finalFee){
+	public List<Restaurant> restaurantByNameFee(String name, BigDecimal inicialFee
+			, BigDecimal finalFee){
+		
 		return restaurantRepository.find(name, inicialFee, finalFee);
 	}
 	
 	@GetMapping("/restaurant/with-free-fee")
 	public List<Restaurant> freeFeeRestaurants(String name){
-		var freeFee = new FreeFeeRestaurant();
-		var similiarName = new RestaurantByName(name);
+	
 		
-		return restaurantRepository.findAll(freeFee.and(similiarName));
+		return restaurantRepository.findAll(withFreeFee()
+				.and(withSimilarName(name)));
 		
 		
 	}
