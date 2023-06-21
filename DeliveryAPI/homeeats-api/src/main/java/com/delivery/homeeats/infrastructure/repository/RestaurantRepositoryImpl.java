@@ -1,5 +1,8 @@
 package com.delivery.homeeats.infrastructure.repository;
 
+import static com.delivery.homeeats.infrastructure.repository.spec.RestaurantSpecs.withFreeFee;
+import static com.delivery.homeeats.infrastructure.repository.spec.RestaurantSpecs.withSimilarName;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +15,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import com.delivery.homeeats.domain.model.Restaurant;
+import com.delivery.homeeats.domain.repository.RestaurantRepository;
 import com.delivery.homeeats.domain.repository.RestaurantRepositoryQueries;
 
 
@@ -28,6 +33,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries{
 	
 	@PersistenceContext
 	private EntityManager manager;
+	@Autowired @Lazy
+	private RestaurantRepository restaurantRepository;
 	
 	@Override
 	public List<Restaurant> find(String name, BigDecimal inicialFee, BigDecimal finalFee) {
@@ -59,6 +66,13 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryQueries{
 		TypedQuery<Restaurant> query = manager.createQuery(criteria);
 		return query.getResultList();
 					
+	}
+
+	@Override
+	public List<Restaurant> findFreeFee(String name) {
+		
+		return restaurantRepository.findAll(withFreeFee()
+				.and(withSimilarName(name)));
 	}				
 
 }

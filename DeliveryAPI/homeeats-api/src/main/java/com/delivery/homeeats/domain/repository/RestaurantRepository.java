@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.delivery.homeeats.domain.model.Restaurant;
 
 @Repository
-public interface RestaurantRepository extends JpaRepository<Restaurant, Long>, RestaurantRepositoryQueries, 
+public interface RestaurantRepository extends CustomJpaRepository<Restaurant, Long>, RestaurantRepositoryQueries, 
 JpaSpecificationExecutor<Restaurant>{
 	
 	List<Restaurant> findByDeliveryFeeBetween (BigDecimal InicialFee, BigDecimal finalFee);

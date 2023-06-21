@@ -1,10 +1,6 @@
 package com.delivery.homeeats.api.controller;
 
-import static com.delivery.homeeats.infrastructure.repository.spec.RestaurantSpecs.withFreeFee;
-import static com.delivery.homeeats.infrastructure.repository.spec.RestaurantSpecs.withSimilarName;
-
 import java.math.BigDecimal;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -18,9 +14,6 @@ import com.delivery.homeeats.domain.model.Kitchen;
 import com.delivery.homeeats.domain.model.Restaurant;
 import com.delivery.homeeats.domain.repository.KitchenRepository;
 import com.delivery.homeeats.domain.repository.RestaurantRepository;
-import com.delivery.homeeats.infrastructure.repository.RestaurantRepositoryImpl;
-import com.delivery.homeeats.infrastructure.repository.spec.FreeFeeRestaurant;
-import com.delivery.homeeats.infrastructure.repository.spec.RestaurantByName;
 
 
 
@@ -90,9 +83,12 @@ public class TestController {
 	public List<Restaurant> freeFeeRestaurants(String name){
 	
 		
-		return restaurantRepository.findAll(withFreeFee()
-				.and(withSimilarName(name)));
-		
-		
+		return restaurantRepository.findFreeFee(name);
+			
+	}
+	
+	@GetMapping("/restaurant/first")
+	public Optional<Restaurant> firstRestaurant(){
+		return restaurantRepository.findFirst();
 	}
 }
