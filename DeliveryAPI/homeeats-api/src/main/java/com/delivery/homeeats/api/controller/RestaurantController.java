@@ -42,7 +42,8 @@ public class RestaurantController {
 	}
 	
 	@GetMapping("/{restaurantId}")
-	public ResponseEntity<Restaurant> findById(@PathVariable Long restaurantId) {
+	public ResponseEntity<Restaurant> findById(@PathVariable Long restaurantId){
+		
 		Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
 		
 		if(restaurant.isPresent()) {
@@ -73,7 +74,8 @@ public class RestaurantController {
 				Optional<Restaurant> actualRestaurant = restaurantRepository.findById(restaurantId);
 				
 				if(actualRestaurant.isPresent()) {
-					BeanUtils.copyProperties(restaurant, actualRestaurant.get(), "id", "paymentMethod");
+					BeanUtils.copyProperties(restaurant, actualRestaurant.get(),
+							"id", "paymentMethod", "adress");
 				
 				Restaurant	restaurantSaved = restaurantResgistrationService.addRestaurant(actualRestaurant.get());
 					return ResponseEntity.ok(restaurantSaved);

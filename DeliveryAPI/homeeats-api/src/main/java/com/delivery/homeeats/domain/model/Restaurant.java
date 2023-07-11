@@ -1,6 +1,7 @@
 package com.delivery.homeeats.domain.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.lang.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,8 +46,19 @@ public class Restaurant {
 	@JoinColumn(name = "kitchen_id", nullable = false)
 	private Kitchen kitchen;
 	
+	@JsonIgnore
 	@Embedded
 	private Adress adress;
+	
+	@JsonIgnore
+	@CreationTimestamp
+	@Column(nullable =  false, columnDefinition = "datetime")
+	private LocalDateTime registerDate;
+	
+	@JsonIgnore
+	@UpdateTimestamp
+	@Column(nullable =  false, columnDefinition = "datetime")
+	private LocalDateTime updateDate;
 	
 	@JsonIgnore
 	@ManyToMany

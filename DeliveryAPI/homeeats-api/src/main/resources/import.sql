@@ -1,9 +1,6 @@
 insert into kitchen (id, name) values (1, 'Thai');
 insert into kitchen (id, name) values (2, 'Indian');
 
-insert into restaurant (name, delivery_fee, kitchen_id) values ('Thai Gourmet', 2.50, 1);
-insert into restaurant (name, delivery_fee, kitchen_id) values ('Thai Delivery', 1.50, 1);
-insert into restaurant (name, delivery_fee, kitchen_id) values ('Tuk Tuk indian food', 3.50, 2);
 
 insert into district (id, name) values (1, 'Porto');
 insert into district (id, name) values (2, 'Lisboa');
@@ -16,6 +13,12 @@ insert into municipalities (id, name, district_id) values (4, 'Sintra', 2);
 insert into municipalities (id, name, district_id) values (5, 'Amadora', 2);
 insert into municipalities (id, name, district_id) values (6, 'Seixal', 3);
 insert into municipalities (id, name, district_id) values (7, 'Almada', 3);
+
+insert into restaurant (name, delivery_fee, kitchen_id, register_date, update_date) values ('Thai Gourmet', 2.50, 1, utc_timestamp, utc_timestamp);
+insert into restaurant (name, delivery_fee, kitchen_id, register_date, update_date) values ('Thai Delivery', 1.50, 1, utc_timestamp, utc_timestamp);
+insert into restaurant (name, delivery_fee, kitchen_id, register_date, update_date) values ('Tuk Tuk indian food', 3.50, 2, utc_timestamp, utc_timestamp);
+
+
 
 insert into payment_method (id, description) values (1, 'Multibank');
 insert into payment_method (id, description) values (2, 'MBway');
