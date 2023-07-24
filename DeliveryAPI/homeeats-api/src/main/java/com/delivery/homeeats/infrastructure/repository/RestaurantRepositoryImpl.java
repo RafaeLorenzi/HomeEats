@@ -1,6 +1,7 @@
 package com.delivery.homeeats.infrastructure.repository;
 
 import static com.delivery.homeeats.infrastructure.repository.spec.RestaurantSpecs.withFreeFee;
+
 import static com.delivery.homeeats.infrastructure.repository.spec.RestaurantSpecs.withSimilarName;
 
 import java.math.BigDecimal;

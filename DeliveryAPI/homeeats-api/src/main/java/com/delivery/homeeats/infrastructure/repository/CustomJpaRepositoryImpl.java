@@ -2,6 +2,7 @@ package com.delivery.homeeats.infrastructure.repository;
 
 import java.util.Optional;
 
+
 import javax.persistence.EntityManager;
 
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
