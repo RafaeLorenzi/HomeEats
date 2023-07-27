@@ -2,6 +2,7 @@ package com.delivery.homeeats.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -20,7 +21,8 @@ public class Adress {
 	@Column(name= "adress_complement")
 	private String complement; 
 	
-	@ManyToOne
+	
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name= "adress_municipalities_id")
 	private Municipalities municipalities;
 	

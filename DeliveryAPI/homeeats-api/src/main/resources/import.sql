@@ -32,7 +32,7 @@ insert into payment_method (id, description) values (3, 'Cash');
 insert into permission (id, name, description) values (1, 'CONSULT_KITCHENS', 'Allows to browse kitchens');
 insert into permission (id, name, description) values (2, 'EDIT_KITCHENS', 'Allows to update kitchens');
 
-insert into restaurant_payment_method (restaurant_id, payment_method_id) values (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3);
+insert into restaurant_payment_method (restaurant_id, payment_method_id) values (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3), (4, 1), (4, 2), (5, 1), (5, 2), (6, 3);
 
 
 insert into item (name, description, price, active, restaurant_id) values ('Porco com molho agridoce', 'Deliciosa carne suína ao molho especial', 78.90, 1, 1);
@@ -48,4 +48,4 @@ insert into item (name, description, price, active, restaurant_id) values ('T-Bo
 
 insert into item (name, description, price, active, restaurant_id) values ('Sanduíche X-Tudo', 'Sandubão com muito queijo, hamburger bovino, bacon, ovo, salada e maionese', 19, 1, 5);
 
-insert into item (name, description, preco, ativo, restaurante_id) values ('Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, 1, 6);
+insert into item (name, description, price, active, restaurant_id) values ('Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, 1, 6);

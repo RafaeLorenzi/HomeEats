@@ -16,6 +16,8 @@ import com.delivery.homeeats.domain.model.Restaurant;
 public interface RestaurantRepository extends CustomJpaRepository<Restaurant, Long>, RestaurantRepositoryQueries, 
 JpaSpecificationExecutor<Restaurant>{
 	
+	@Query("from Restaurant r join r.kitchen")
+	List<Restaurant> findAll();
 
 
 }

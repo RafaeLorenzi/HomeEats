@@ -1,7 +1,4 @@
 package com.delivery.homeeats.domain.model;
-
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +25,11 @@ public class Group {
 	private Long id;
 	
 	@Column(nullable = false)
-	private String nome;
+	private String name;
 	
 	@ManyToMany
-	@JoinTable(name = "grupo_permissao", joinColumns = @JoinColumn(name = "grupo_id"),
-			inverseJoinColumns = @JoinColumn(name = "permissao_id"))
+	@JoinTable(name = "group_permission", joinColumns = @JoinColumn(name = "group_id"),
+			inverseJoinColumns = @JoinColumn(name = "permission_id"))
 	private List<Permission> permissions = new ArrayList<>();
 
 }
