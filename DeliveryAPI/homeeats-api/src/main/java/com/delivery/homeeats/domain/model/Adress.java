@@ -12,11 +12,14 @@ import lombok.Data;
 @Embeddable
 public class Adress {
 	
-	@Column(name= "postal_code")
+	@Column(name= "adress_postal_code")
 	private String postalCode;
 	
-	@Column(name= "adress")
+	@Column(name= "adress_street_adress")
 	private String streetAdress;
+	
+	@Column(name= "adress_number")
+	private String number;
 	
 	@Column(name= "adress_complement")
 	private String complement; 

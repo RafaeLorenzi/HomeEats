@@ -1,9 +1,4 @@
-create table district (
-	id bigint not null auto_increment,
-	 name varchar(255) not null, 
-	 
-	 primary key (id)
- ) engine=InnoDB default charset=utf8;
+
 
 
 create table `group` (
@@ -32,21 +27,10 @@ create table item (
  ) engine=InnoDB default charset=utf8;
 
  
-create table kitchen (
-	id bigint not null auto_increment,
-	name varchar(255) not null,
-	
-	primary key (id)
-) engine=InnoDB default charset=utf8;
 
 
-create table municipalities (
-	id bigint not null auto_increment, 
-	name varchar(255) not null, 
-	district_id bigint not null, 
-	
-	primary key (id)
-) engine=InnoDB default charset=utf8;
+
+
 
 create table payment_method (
 	id bigint not null auto_increment, 
