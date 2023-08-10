@@ -16,17 +16,28 @@ import com.delivery.homeeats.domain.repository.MunicipalitiesRepository;
 @Service
 public class MunicipalitiesRegistrationService {
 	
+	private static final String MSG_MUNICIPALITIE_IN_USE =
+			"The municipalitie with ID %d cannot be removed as it is in use.";
+
+	
+	private static final String MSG_MUNICIPALITIE_NOT_FOUND = 
+			"There is no registered municipalitie with the ID %d.";
+
+	
 	@Autowired
 	private MunicipalitiesRepository municipalitiesRepository;
 	
 	@Autowired
-	private DistrictRepository districtRepository;
+	private DistrictResgistrationService districtResgistrationService;
 	
 	public Municipalities addMunicipalities(Municipalities municipalities) {
 		Long districtId = municipalities.getDistrict().getId();
-		District district = districtRepository.findById(districtId)
-				.orElseThrow(() -> new EntityNotExistException( 
-						String.format("There is no registered district with the ID %d." , districtId)));
+		
+		District district = districtResgistrationService.findOrFail(districtId);
+		
+//		District district = districtRepository.findById(districtId)
+//				.orElseThrow(() -> new EntityNotExistException( 
+//						String.format("There is no registered district with the ID %d." , districtId)));
 		
 		
 		municipalities.setDistrict(district);
@@ -34,18 +45,24 @@ public class MunicipalitiesRegistrationService {
 		return municipalitiesRepository.save(municipalities);
 	}
 	
-	public void deleteMunicipalitie(Long municipalitieId) {
+	public void deleteMunicipalitie(Long municipalitiesId) {
 		try {
-			municipalitiesRepository.deleteById(municipalitieId);
+			municipalitiesRepository.deleteById(municipalitiesId);
 			
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotExistException( 
-					String.format("There is no registered municipalitie with the ID %d." , municipalitieId));
+					String.format(MSG_MUNICIPALITIE_NOT_FOUND , municipalitiesId));
 			
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
-					String.format("The municipalitie with ID %d cannot be removed as it is in use.", municipalitieId));
+					String.format(MSG_MUNICIPALITIE_IN_USE, municipalitiesId));
 		}
+	}
+	
+	public Municipalities findOrFail(Long municipalitiesId) {
+		return municipalitiesRepository.findById(municipalitiesId)
+				.orElseThrow(() -> new EntityNotExistException(
+						String.format(MSG_MUNICIPALITIE_NOT_FOUND , municipalitiesId)));
 	}
 
 }

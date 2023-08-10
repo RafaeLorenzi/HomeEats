@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
@@ -44,15 +45,9 @@ public class KitchenController {
 	
 	
 	@GetMapping("/{kitchenId}")
-	public ResponseEntity<Kitchen> findById(@PathVariable Long kitchenId) {
-		Optional<Kitchen> kitchen = kitchenRepository.findById(kitchenId);
+	public Kitchen findById(@PathVariable Long kitchenId) {
+		return kitchenRegistrationService.findOrFail(kitchenId);
 		
-		if(kitchen.isPresent()) {
-			return ResponseEntity.ok(kitchen.get());
-		}
-		
-		return ResponseEntity.notFound().build();
-		  	
 	}
 	
 	@PostMapping
@@ -61,36 +56,27 @@ public class KitchenController {
 		return kitchenRegistrationService.addKitchen(kitchen);
 	}
 	
-	@PutMapping("/{kitchenId}")
-	public ResponseEntity<Kitchen> updateKitchen(@PathVariable Long kitchenId, 
-			@RequestBody Kitchen kitchen){
-		Optional<Kitchen> actualKitchen = kitchenRepository.findById(kitchenId);
-		
-		if(actualKitchen.isPresent()) {
-		BeanUtils.copyProperties(kitchen, actualKitchen.get(), "id");
-		
-		Kitchen kitchenSaved = kitchenRegistrationService.addKitchen(actualKitchen.get());
-		
-		return ResponseEntity.ok(kitchenSaved);
-		}
-		
-		return ResponseEntity.notFound().build();
-			
-	}
 	
-	@DeleteMapping("/{kitchenId}")
-	public ResponseEntity<Kitchen> deleteKitchen(@PathVariable Long kitchenId){
-		try {
-				kitchenRegistrationService.remove(kitchenId);
-				return ResponseEntity.noContent().build();		
-	    	
-		} catch (EntityNotExistException e) {
-			return ResponseEntity.notFound().build();
-								
-		} catch (EntityInUseException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}
+	
+	@PutMapping("/{kitchenId}")
+	public Kitchen updateKitchen(@PathVariable Long kitchenId, 
+			@RequestBody Kitchen kitchen){
+		Kitchen actualKitchen = kitchenRegistrationService.findOrFail(kitchenId);
 		
+		BeanUtils.copyProperties(kitchen, actualKitchen, "id");
+		
+		return kitchenRegistrationService.addKitchen(actualKitchen);
+		
+	}
+		
+		
+
+	@DeleteMapping("/{kitchenId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteKitchen(@PathVariable Long kitchenId){
+	
+				kitchenRegistrationService.remove(kitchenId);	
+	
 	}
 	
 }
