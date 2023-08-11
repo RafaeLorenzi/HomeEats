@@ -39,14 +39,9 @@ public class DistrictController {
 	}
 
 	@GetMapping("/{districtId}")
-	public ResponseEntity<District> findById(@PathVariable Long districtId){
-		Optional<District> district = districtRepository.findById(districtId);
-		
-		if(district.isPresent()) {
-			return ResponseEntity.ok(district.get());
-		}
-		
-		return ResponseEntity.notFound().build();
+	public District findById(@PathVariable Long districtId){
+	
+		return districtResgistrationService.findOrFail(districtId);
 	}
 	
 	@PostMapping
@@ -56,33 +51,20 @@ public class DistrictController {
 	}
 	
 	@PutMapping("/{districtId}")
-	public ResponseEntity<District> updateDistric(@PathVariable Long districtId,
+	public District updateDistric(@PathVariable Long districtId,
 			@RequestBody District district){
-		Optional<District> actualDistrict = districtRepository.findById(districtId);
+		District actualDistrict = districtResgistrationService.findOrFail(districtId);
 		
-		if(actualDistrict.isPresent()) {
-			BeanUtils.copyProperties(district, actualDistrict, "id");
+		BeanUtils.copyProperties(district, actualDistrict, "id");
 			
-			 District districtSaved = districtResgistrationService.addDistrict(actualDistrict.get());
-			
-			return ResponseEntity.ok(districtSaved);
-		}
-		return ResponseEntity.notFound().build();
+		return districtResgistrationService.addDistrict(actualDistrict);
 		
 	}
 	
 	@DeleteMapping("/{districtId}")
-	public ResponseEntity<District> deleteDistrict(@PathVariable Long districtId){
-		try {
-			districtResgistrationService.remove(districtId);
-			return ResponseEntity.noContent().build();
-			
-		} catch (EntityNotExistException e) {
-			return ResponseEntity.notFound().build();
-			
-		} catch (EntityInUseException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteDistrict(@PathVariable Long districtId){
+		 districtResgistrationService.remove(districtId);
 	}
 
 }

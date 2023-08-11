@@ -17,10 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
 import com.delivery.homeeats.domain.model.Restaurant;
+import com.delivery.homeeats.domain.model.service.DistrictResgistrationService;
 import com.delivery.homeeats.domain.model.service.RestaurantResgistrationService;
 import com.delivery.homeeats.domain.repository.RestaurantRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,69 +44,80 @@ public class RestaurantController {
 	}
 	
 	@GetMapping("/{restaurantId}")
-	public ResponseEntity<Restaurant> findById(@PathVariable Long restaurantId){
+	public Restaurant findById(@PathVariable Long restaurantId){
 		
-		Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
-		
-		if(restaurant.isPresent()) {
-			return ResponseEntity.ok(restaurant.get());
-		}
-		
-		return ResponseEntity.notFound().build();
+		return restaurantResgistrationService.findOrFail(restaurantId);
 	}
+	
+//	@PostMapping
+//	public ResponseEntity<?> addRestaurant(@RequestBody Restaurant restaurant) {
+//		try {
+//		restaurant = restaurantResgistrationService.addRestaurant(restaurant);
+//		
+//		return ResponseEntity.status(HttpStatus.CREATED)
+//				.body(restaurant);
+//		} catch (EntityNotExistException e) {
+//			return ResponseEntity.badRequest()
+//					.body(e.getMessage());
+//		}
+//	}
 	
 	@PostMapping
-	public ResponseEntity<?> addRestaurant(@RequestBody Restaurant restaurant) {
-		try {
-		restaurant = restaurantResgistrationService.addRestaurant(restaurant);
-		
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(restaurant);
-		} catch (EntityNotExistException e) {
-			return ResponseEntity.badRequest()
-					.body(e.getMessage());
-		}
+	@ResponseStatus(HttpStatus.CREATED)
+	public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
+		return restaurantResgistrationService.addRestaurant(restaurant);
 	}
+	
+//	@PutMapping("/{restaurantId}")
+//	public ResponseEntity<?> updateRestaurant(@PathVariable Long restaurantId,
+//			@RequestBody Restaurant restaurant){
+//		
+//			try {
+//				Optional<Restaurant> actualRestaurant = restaurantRepository.findById(restaurantId);
+//				
+//				if(actualRestaurant.isPresent()) {
+//					BeanUtils.copyProperties(restaurant, actualRestaurant.get(),
+//							"id", "paymentMethod", "adress");
+//				
+//				Restaurant	restaurantSaved = restaurantResgistrationService.addRestaurant(actualRestaurant.get());
+//					return ResponseEntity.ok(restaurantSaved);
+//		    	}
+//				
+//				return ResponseEntity.notFound().build();
+//				
+//				
+//			}catch (EntityNotExistException e) {
+//				return ResponseEntity.badRequest()
+//						.body(e.getMessage());
+//			}
+//		
+//	
+//	}
+	
 	
 	@PutMapping("/{restaurantId}")
-	public ResponseEntity<?> updateRestaurant(@PathVariable Long restaurantId,
-			@RequestBody Restaurant restaurant){
+	public Restaurant updateRestaurant(@PathVariable Long restaurantId,
+			@RequestBody Restaurant restaurant) {
+		Restaurant actualRestaurant = restaurantResgistrationService.findOrFail(restaurantId);
 		
-			try {
-				Optional<Restaurant> actualRestaurant = restaurantRepository.findById(restaurantId);
-				
-				if(actualRestaurant.isPresent()) {
-					BeanUtils.copyProperties(restaurant, actualRestaurant.get(),
-							"id", "paymentMethod", "adress");
-				
-				Restaurant	restaurantSaved = restaurantResgistrationService.addRestaurant(actualRestaurant.get());
-					return ResponseEntity.ok(restaurantSaved);
-				
-		    	}
-				
-				return ResponseEntity.notFound().build();
-				
-				
-			}catch (EntityNotExistException e) {
-				return ResponseEntity.badRequest()
-						.body(e.getMessage());
-			}
+		BeanUtils.copyProperties(restaurant, actualRestaurant,
+				"id", "paymentMethod", "adress");
 		
-	
+		return restaurantResgistrationService.addRestaurant(actualRestaurant);
+		
 	}
 	
+	
+	
 	@PatchMapping("/{restaurantId}")
-	public ResponseEntity<?> parcialUpdate(@PathVariable Long restaurantId,
+	public Restaurant parcialUpdate(@PathVariable Long restaurantId,
 			@RequestBody Map<String, Object> fields){
-		Optional<Restaurant> actualRestaurant = restaurantRepository.findById(restaurantId);
 		
-		if(actualRestaurant.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}
+		Restaurant actualRestaurant = restaurantResgistrationService.findOrFail(restaurantId);
 		
-		merge(fields, actualRestaurant.get());
+		merge(fields, actualRestaurant);
 		
-		return updateRestaurant(restaurantId, actualRestaurant.get());
+		return updateRestaurant(restaurantId, actualRestaurant);
 	}
 	
 	

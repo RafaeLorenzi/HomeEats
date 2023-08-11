@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.delivery.homeeats.domain.exception.EntityInUseException;
@@ -41,64 +42,46 @@ public class MunicipalitiesController {
 	}
 	
 	@GetMapping("/{municipalitiesId}")
-	public ResponseEntity<Municipalities> findById(@PathVariable Long municipalitiesId){
-		Optional<Municipalities> municipalities = municipalitiesRepository.findById(municipalitiesId);
-		
-		if(municipalities.isPresent()) {
-			return ResponseEntity.ok(municipalities.get());
-		}
-		
-		return ResponseEntity.notFound().build();
+	public Municipalities findById(@PathVariable Long municipalitiesId){
+		return municipalitiesRegistrationService.findOrFail(municipalitiesId);
 	}
+	
+//	@PostMapping
+//	public ResponseEntity<?> addMunicipalitie(@RequestBody Municipalities municipalities){
+//		try {
+//			municipalities = municipalitiesRegistrationService.addMunicipalities(municipalities);
+//			
+//			return ResponseEntity.status(HttpStatus.CREATED)
+//					.body(municipalities);
+//		} catch (EntityNotExistException e) {
+//			return ResponseEntity.badRequest()
+//					.body(e.getMessage());
+//		}
+//	}
 	
 	@PostMapping
-	public ResponseEntity<?> addMunicipalitie(@RequestBody Municipalities municipalities){
-		try {
-			municipalities = municipalitiesRegistrationService.addMunicipalities(municipalities);
-			
-			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(municipalities);
-		} catch (EntityNotExistException e) {
-			return ResponseEntity.badRequest()
-					.body(e.getMessage());
-		}
+	@ResponseStatus(HttpStatus.CREATED)
+	public Municipalities addMunicipalities(@RequestBody Municipalities municipalities) {
+		return municipalitiesRegistrationService.addMunicipalities(municipalities);
 	}
 	
+	
 	@PutMapping("/{municipalitiesId}")
-	public ResponseEntity<?> updateMunicipalitie(@PathVariable Long municipalitiesId,
+	public Municipalities updateMunicipalitie(@PathVariable Long municipalitiesId,
 			@RequestBody Municipalities municipalities){
-			
-		try {
-			Optional<Municipalities> actualMunicipalities = municipalitiesRepository.findById(municipalitiesId);
-			
-			if(actualMunicipalities.isPresent()) {
-				BeanUtils.copyProperties(municipalities, actualMunicipalities, "id");
+		
+		Municipalities actualMunicipalities = municipalitiesRegistrationService.findOrFail(municipalitiesId);
+		
+		BeanUtils.copyProperties(municipalities, actualMunicipalities, "id");
 				
-				Municipalities municipalitiesSaved = municipalitiesRegistrationService.addMunicipalities(actualMunicipalities.get());
-				return ResponseEntity.ok(municipalitiesSaved);
-			}
-			
-			return ResponseEntity.notFound().build();
-			
-		} catch (EntityNotExistException e) {
-			return ResponseEntity.badRequest()
-					.body(e.getMessage());
-		}
+		return municipalitiesRegistrationService.addMunicipalities(actualMunicipalities);
+		
 	}
 	
 	@DeleteMapping("/{municipalitiesId}")
-	public ResponseEntity<Municipalities> deleteMunicipalitie(@PathVariable Long municipalitiesId){
-		try {
-			
-			municipalitiesRegistrationService.deleteMunicipalitie(municipalitiesId);
-			return ResponseEntity.noContent().build();
-			
-		} catch (EntityNotExistException e) {
-			return ResponseEntity.notFound().build();
-			
-		}catch (EntityInUseException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteMunicipalitie(@PathVariable Long municipalitiesId){
+		 municipalitiesRegistrationService.deleteMunicipalitie(municipalitiesId);
 	}
 	
 
