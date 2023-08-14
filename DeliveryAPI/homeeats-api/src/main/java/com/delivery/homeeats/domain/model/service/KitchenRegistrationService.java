@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
+import com.delivery.homeeats.domain.exception.KitchenNotFoundException;
 import com.delivery.homeeats.domain.model.Kitchen;
 import com.delivery.homeeats.domain.repository.KitchenRepository;
 
@@ -35,8 +36,7 @@ public class KitchenRegistrationService {
 			kitchenRepository.deleteById(kitchenId);
 		
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotExistException(
-					String.format(MSG_KITCHEN_NOT_FOUND , kitchenId));
+			throw new KitchenNotFoundException(kitchenId);
 			
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
@@ -46,8 +46,7 @@ public class KitchenRegistrationService {
 	
 	public Kitchen findOrFail( Long kitchenId) {
 		return kitchenRepository.findById(kitchenId)
-				.orElseThrow(() -> new EntityNotExistException(
-						String.format(MSG_KITCHEN_NOT_FOUND , kitchenId)));
+				.orElseThrow(() -> new KitchenNotFoundException(kitchenId));
 	}
 
 }

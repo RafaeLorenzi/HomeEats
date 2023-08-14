@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
+import com.delivery.homeeats.domain.exception.MunicipalitiesNotFoundException;
 import com.delivery.homeeats.domain.model.District;
 import com.delivery.homeeats.domain.model.Municipalities;
 import com.delivery.homeeats.domain.repository.DistrictRepository;
@@ -19,9 +20,7 @@ public class MunicipalitiesRegistrationService {
 	private static final String MSG_MUNICIPALITIE_IN_USE =
 			"The municipalitie with ID %d cannot be removed as it is in use.";
 
-	
-	private static final String MSG_MUNICIPALITIE_NOT_FOUND = 
-			"There is no registered municipalitie with the ID %d.";
+
 
 	
 	@Autowired
@@ -50,8 +49,7 @@ public class MunicipalitiesRegistrationService {
 			municipalitiesRepository.deleteById(municipalitiesId);
 			
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotExistException( 
-					String.format(MSG_MUNICIPALITIE_NOT_FOUND , municipalitiesId));
+			throw new MunicipalitiesNotFoundException( municipalitiesId);
 			
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
@@ -61,8 +59,7 @@ public class MunicipalitiesRegistrationService {
 	
 	public Municipalities findOrFail(Long municipalitiesId) {
 		return municipalitiesRepository.findById(municipalitiesId)
-				.orElseThrow(() -> new EntityNotExistException(
-						String.format(MSG_MUNICIPALITIE_NOT_FOUND , municipalitiesId)));
+				.orElseThrow(() -> new MunicipalitiesNotFoundException( municipalitiesId));
 	}
 
 }

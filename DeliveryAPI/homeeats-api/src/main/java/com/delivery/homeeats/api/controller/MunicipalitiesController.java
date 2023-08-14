@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.delivery.homeeats.domain.exception.BusinessException;
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
+import com.delivery.homeeats.domain.exception.MunicipalitiesNotFoundException;
 import com.delivery.homeeats.domain.model.Municipalities;
 import com.delivery.homeeats.domain.model.service.MunicipalitiesRegistrationService;
 import com.delivery.homeeats.domain.repository.MunicipalitiesRepository;
@@ -54,8 +55,8 @@ public class MunicipalitiesController {
 	public Municipalities addMunicipalities(@RequestBody Municipalities municipalities) {
 		try {
 			return municipalitiesRegistrationService.addMunicipalities(municipalities);
-		} catch (EntityNotExistException e) {
-			throw new BusinessException(e.getMessage());
+		} catch (MunicipalitiesNotFoundException e) {
+			throw new BusinessException(e.getMessage(), e);
 			
 		}
 	}
@@ -71,8 +72,8 @@ public class MunicipalitiesController {
 		
 		try {
 			return municipalitiesRegistrationService.addMunicipalities(actualMunicipalities);
-		} catch (EntityNotExistException e) {
-			throw new BusinessException(e.getMessage());
+		} catch (MunicipalitiesNotFoundException e) {
+			throw new BusinessException(e.getMessage(), e);
 			
 		}
 	

@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.delivery.homeeats.domain.exception.DistrictNotFoundException;
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
 import com.delivery.homeeats.domain.model.District;
@@ -16,9 +17,6 @@ public class DistrictResgistrationService {
 	private static final String MSG_DISTRICT_IN_USE = 
 			"The district with ID %d cannot be removed as it is in use.";
 	
-	
-	private static final String MSG_DISTRICT_NOT_FOUND = 
-			"There is no registered district with the ID %d.";
 	
 	@Autowired
 	private DistrictRepository districtRepository;
@@ -32,8 +30,7 @@ public class DistrictResgistrationService {
 			districtRepository.deleteById(districtId);
 			
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotExistException(
-					String.format(MSG_DISTRICT_NOT_FOUND , districtId));
+			throw new DistrictNotFoundException(districtId);
 			
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException(
@@ -43,8 +40,7 @@ public class DistrictResgistrationService {
 	
 	public District findOrFail(Long districtId) {
 		return districtRepository.findById(districtId)
-				.orElseThrow(() -> new EntityNotExistException(
-						String.format(MSG_DISTRICT_NOT_FOUND)));
+				.orElseThrow(() -> new DistrictNotFoundException(districtId));
 	}
 	
 

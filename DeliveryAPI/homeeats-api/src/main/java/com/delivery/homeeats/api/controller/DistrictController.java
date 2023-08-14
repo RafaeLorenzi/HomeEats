@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.delivery.homeeats.domain.exception.BusinessException;
+import com.delivery.homeeats.domain.exception.DistrictNotFoundException;
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
 import com.delivery.homeeats.domain.model.District;
@@ -38,17 +40,25 @@ public class DistrictController {
 		return districtRepository.findAll();
 	}
 
+	
+	
 	@GetMapping("/{districtId}")
 	public District findById(@PathVariable Long districtId){
 	
 		return districtResgistrationService.findOrFail(districtId);
 	}
 	
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public District addDistrict(@RequestBody District district) {
-		return districtResgistrationService.addDistrict(district);
+		try {
+			return districtResgistrationService.addDistrict(district);
+		} catch ( DistrictNotFoundException e) {
+			throw new BusinessException(e.getMessage());
+		}
 	}
+	
 	
 	@PutMapping("/{districtId}")
 	public District updateDistric(@PathVariable Long districtId,
@@ -57,9 +67,14 @@ public class DistrictController {
 		
 		BeanUtils.copyProperties(district, actualDistrict, "id");
 			
-		return districtResgistrationService.addDistrict(actualDistrict);
+		try {
+			return districtResgistrationService.addDistrict(actualDistrict);
+		} catch ( DistrictNotFoundException e) {
+			throw new BusinessException(e.getMessage());
+		}
 		
 	}
+	
 	
 	@DeleteMapping("/{districtId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

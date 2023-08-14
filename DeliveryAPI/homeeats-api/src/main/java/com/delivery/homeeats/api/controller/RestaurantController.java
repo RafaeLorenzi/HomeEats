@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.delivery.homeeats.domain.exception.BusinessException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
+import com.delivery.homeeats.domain.exception.RestaurantNotFoundException;
 import com.delivery.homeeats.domain.model.Restaurant;
 import com.delivery.homeeats.domain.model.service.DistrictResgistrationService;
 import com.delivery.homeeats.domain.model.service.RestaurantResgistrationService;
@@ -57,7 +58,7 @@ public class RestaurantController {
 	public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
 		try {
 			return restaurantResgistrationService.addRestaurant(restaurant);
-		} catch (EntityNotExistException e) {
+		} catch (RestaurantNotFoundException e) {
 			throw new BusinessException(e.getMessage());
 		}
 		
@@ -76,7 +77,7 @@ public class RestaurantController {
 		
 		try {
 			return restaurantResgistrationService.addRestaurant(actualRestaurant);
-		} catch (EntityNotExistException e) {
+		} catch (RestaurantNotFoundException e) {
 			throw new BusinessException(e.getMessage());
 		}
 		

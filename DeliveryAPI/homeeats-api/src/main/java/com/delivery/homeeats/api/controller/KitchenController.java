@@ -21,8 +21,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.delivery.homeeats.domain.exception.BusinessException;
+import com.delivery.homeeats.domain.exception.DistrictNotFoundException;
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
+import com.delivery.homeeats.domain.exception.KitchenNotFoundException;
 import com.delivery.homeeats.domain.model.Kitchen;
 import com.delivery.homeeats.domain.model.service.KitchenRegistrationService;
 import com.delivery.homeeats.domain.repository.KitchenRepository;
@@ -53,7 +56,12 @@ public class KitchenController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Kitchen addKitchen(@RequestBody Kitchen kitchen) {
-		return kitchenRegistrationService.addKitchen(kitchen);
+		
+		try {
+			return kitchenRegistrationService.addKitchen(kitchen);
+		} catch (KitchenNotFoundException e) {
+			throw new BusinessException(e.getMessage());
+		}
 	}
 	
 	
@@ -65,7 +73,11 @@ public class KitchenController {
 		
 		BeanUtils.copyProperties(kitchen, actualKitchen, "id");
 		
-		return kitchenRegistrationService.addKitchen(actualKitchen);
+		try {
+			return kitchenRegistrationService.addKitchen(actualKitchen);
+		} catch (KitchenNotFoundException e) {
+			throw new BusinessException(e.getMessage());
+		}
 		
 	}
 		
