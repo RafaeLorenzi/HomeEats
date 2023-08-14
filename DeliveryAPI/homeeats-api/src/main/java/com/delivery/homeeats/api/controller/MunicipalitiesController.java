@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.delivery.homeeats.domain.exception.BusinessException;
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
 import com.delivery.homeeats.domain.model.Municipalities;
@@ -46,23 +47,17 @@ public class MunicipalitiesController {
 		return municipalitiesRegistrationService.findOrFail(municipalitiesId);
 	}
 	
-//	@PostMapping
-//	public ResponseEntity<?> addMunicipalitie(@RequestBody Municipalities municipalities){
-//		try {
-//			municipalities = municipalitiesRegistrationService.addMunicipalities(municipalities);
-//			
-//			return ResponseEntity.status(HttpStatus.CREATED)
-//					.body(municipalities);
-//		} catch (EntityNotExistException e) {
-//			return ResponseEntity.badRequest()
-//					.body(e.getMessage());
-//		}
-//	}
+
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Municipalities addMunicipalities(@RequestBody Municipalities municipalities) {
-		return municipalitiesRegistrationService.addMunicipalities(municipalities);
+		try {
+			return municipalitiesRegistrationService.addMunicipalities(municipalities);
+		} catch (EntityNotExistException e) {
+			throw new BusinessException(e.getMessage());
+			
+		}
 	}
 	
 	
@@ -73,8 +68,14 @@ public class MunicipalitiesController {
 		Municipalities actualMunicipalities = municipalitiesRegistrationService.findOrFail(municipalitiesId);
 		
 		BeanUtils.copyProperties(municipalities, actualMunicipalities, "id");
-				
-		return municipalitiesRegistrationService.addMunicipalities(actualMunicipalities);
+		
+		try {
+			return municipalitiesRegistrationService.addMunicipalities(actualMunicipalities);
+		} catch (EntityNotExistException e) {
+			throw new BusinessException(e.getMessage());
+			
+		}
+	
 		
 	}
 	

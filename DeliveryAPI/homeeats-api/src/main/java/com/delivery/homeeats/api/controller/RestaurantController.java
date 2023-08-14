@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.delivery.homeeats.domain.exception.BusinessException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
 import com.delivery.homeeats.domain.model.Restaurant;
 import com.delivery.homeeats.domain.model.service.DistrictResgistrationService;
@@ -49,50 +50,20 @@ public class RestaurantController {
 		return restaurantResgistrationService.findOrFail(restaurantId);
 	}
 	
-//	@PostMapping
-//	public ResponseEntity<?> addRestaurant(@RequestBody Restaurant restaurant) {
-//		try {
-//		restaurant = restaurantResgistrationService.addRestaurant(restaurant);
-//		
-//		return ResponseEntity.status(HttpStatus.CREATED)
-//				.body(restaurant);
-//		} catch (EntityNotExistException e) {
-//			return ResponseEntity.badRequest()
-//					.body(e.getMessage());
-//		}
-//	}
+
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
-		return restaurantResgistrationService.addRestaurant(restaurant);
+		try {
+			return restaurantResgistrationService.addRestaurant(restaurant);
+		} catch (EntityNotExistException e) {
+			throw new BusinessException(e.getMessage());
+		}
+		
 	}
 	
-//	@PutMapping("/{restaurantId}")
-//	public ResponseEntity<?> updateRestaurant(@PathVariable Long restaurantId,
-//			@RequestBody Restaurant restaurant){
-//		
-//			try {
-//				Optional<Restaurant> actualRestaurant = restaurantRepository.findById(restaurantId);
-//				
-//				if(actualRestaurant.isPresent()) {
-//					BeanUtils.copyProperties(restaurant, actualRestaurant.get(),
-//							"id", "paymentMethod", "adress");
-//				
-//				Restaurant	restaurantSaved = restaurantResgistrationService.addRestaurant(actualRestaurant.get());
-//					return ResponseEntity.ok(restaurantSaved);
-//		    	}
-//				
-//				return ResponseEntity.notFound().build();
-//				
-//				
-//			}catch (EntityNotExistException e) {
-//				return ResponseEntity.badRequest()
-//						.body(e.getMessage());
-//			}
-//		
-//	
-//	}
+
 	
 	
 	@PutMapping("/{restaurantId}")
@@ -103,7 +74,11 @@ public class RestaurantController {
 		BeanUtils.copyProperties(restaurant, actualRestaurant,
 				"id", "paymentMethod", "adress");
 		
-		return restaurantResgistrationService.addRestaurant(actualRestaurant);
+		try {
+			return restaurantResgistrationService.addRestaurant(actualRestaurant);
+		} catch (EntityNotExistException e) {
+			throw new BusinessException(e.getMessage());
+		}
 		
 	}
 	
