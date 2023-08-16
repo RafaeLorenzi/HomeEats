@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +19,23 @@ import com.delivery.homeeats.domain.exception.EntityNotExistException;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
+	
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
+		
+		ProblemType problemType = ProblemType.MESSAGE_NOT_READABLE;
+		String detail = "The request body is invalid, please check for syntax errors.";
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+	
+	
+	
 	@ExceptionHandler(EntityNotExistException.class)
 	public ResponseEntity<?> handleEntityNotExistException(
 			EntityNotExistException ex, WebRequest request) {
@@ -28,11 +46,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 		
-//		Problem problem = Problem.builder()
-//				.status(status.value())
-//				.type("https://localhost:8080/entity-not-found")
-//				.detail(ex.getMessage())
-//				.build();
 		
 		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	
@@ -44,7 +57,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<?> handleBusinessException(
 			BusinessException ex, WebRequest request) {
 		
-		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ProblemType problemType = ProblemType.BUSINESS_ERROR;
+		String detail = ex.getMessage();
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 		
 		
 	}
@@ -55,7 +74,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<?> handleEntityInUseException(
 			EntityInUseException ex, WebRequest request ){
 		
-		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+		HttpStatus status = HttpStatus.CONFLICT;
+		ProblemType problemType = ProblemType.ENTITY_IN_USE;
+		String detail = ex.getMessage();
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 	
 
