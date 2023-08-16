@@ -2,6 +2,10 @@ package com.delivery.homeeats.api.exceptionHandler;
 
 
 import java.time.LocalDateTime;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +19,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.delivery.homeeats.domain.exception.BusinessException;
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -23,7 +28,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		Throwable rootCause = ExceptionUtils.getRootCause(ex);
 		
+		if (rootCause instanceof InvalidFormatException) {
+			return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
+		}
 		
 		ProblemType problemType = ProblemType.MESSAGE_NOT_READABLE;
 		String detail = "The request body is invalid, please check for syntax errors.";
@@ -36,6 +45,26 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	
 	
+	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
+		String path = ex.getPath().stream()
+				.map(ref -> ref.getFieldName())
+				.collect(Collectors.joining("."));
+		
+		ProblemType problemType = ProblemType.MESSAGE_NOT_READABLE;
+		String detail = String.format("The property '%s' received the value '%s'" + 
+		"which is of an invalid type. Please correct it and provide a value compatible with the type %s" ,
+		path, ex.getValue(), ex.getTargetType().getSimpleName());
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+
+
+
 	@ExceptionHandler(EntityNotExistException.class)
 	public ResponseEntity<?> handleEntityNotExistException(
 			EntityNotExistException ex, WebRequest request) {
