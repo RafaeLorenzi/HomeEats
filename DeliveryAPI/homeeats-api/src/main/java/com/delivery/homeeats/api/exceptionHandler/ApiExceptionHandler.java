@@ -30,6 +30,25 @@ import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {
+		
+		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+		ProblemType problemType = ProblemType.SYSTEM_ERROR;
+		
+		String detail = String.format("An unexpected internal error occurred in the system." +
+				"Please try again, and if the issue persists, contact us.");
+		
+		
+        ex.printStackTrace();
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+		
+	}
+	
+	
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
