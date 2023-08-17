@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
@@ -61,7 +63,7 @@ public class RestaurantController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurant addRestaurant(@RequestBody Restaurant restaurant) {
+	public Restaurant addRestaurant(@RequestBody @Valid Restaurant restaurant) {
 		try {
 			return restaurantResgistrationService.addRestaurant(restaurant);
 		} catch (RestaurantNotFoundException e) {
@@ -107,7 +109,7 @@ public class RestaurantController {
 			, HttpServletRequest request) {
 	
 		ServletServerHttpRequest  serverHttpRequest = new ServletServerHttpRequest(request);
-		
+			
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			objectMapper.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, true);
