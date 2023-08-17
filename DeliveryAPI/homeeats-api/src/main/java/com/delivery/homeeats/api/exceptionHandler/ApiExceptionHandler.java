@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.delivery.homeeats.domain.exception.BusinessException;
@@ -79,9 +80,24 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 		
 		return handleExceptionInternal(ex, problem, headers, status, request);
-		
-		
+				
 	}
+	
+	@Override
+	protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException ex, 
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
+		ProblemType problemType = ProblemType.RESOURCE_NOT_FOUND;
+		String detail = String.format("The resource %s you tried to access does not exist." 
+				, ex.getRequestURL());
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		return handleExceptionInternal(ex, problem, headers, status, request);
+				
+	}
+	
+	
 	
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -106,7 +122,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 			EntityNotExistException ex, WebRequest request) {
 		
 		HttpStatus status = HttpStatus.NOT_FOUND;
-		ProblemType problemType = ProblemType.ENTITY_NOT_FOUND;
+		ProblemType problemType = ProblemType.RESOURCE_NOT_FOUND;
 		String detail = ex.getMessage();
 		
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
