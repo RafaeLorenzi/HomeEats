@@ -15,6 +15,7 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.delivery.homeeats.domain.exception.BusinessException;
@@ -50,8 +51,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		
-		// Criei o método joinPath para reaproveitar em todos os métodos que precisam
-				// concatenar os nomes das propriedades (separando por ".")
+		// I created the joinPath method to reuse it in all the methods that need it
+				// Concatenate the property names (separated by ".")
+		
 		String path = joinPath(ex.getPath());
 		
 		ProblemType problemType = ProblemType.MESSAGE_NOT_READABLE;
@@ -64,7 +66,22 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	
-	
+	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(
+			MethodArgumentTypeMismatchException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+		
+		ProblemType problemType = ProblemType.INVALID_PARAMETER;
+		
+		String detail = String.format( "The URL parameter '%s' received the value '%s'" +
+		"which is of an invalid type. Please correct it and provide a value compatible with the type %s.",
+		ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName() );
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		return handleExceptionInternal(ex, problem, headers, status, request);
+		
+		
+	}
 	
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
