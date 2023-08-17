@@ -2,6 +2,7 @@ package com.delivery.homeeats.api.exceptionHandler;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.delivery.homeeats.domain.exception.BusinessException;
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
+import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -44,13 +47,29 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	
+	private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
+		// Criei o método joinPath para reaproveitar em todos os métodos que precisam
+				// concatenar os nomes das propriedades (separando por ".")
+		String path = joinPath(ex.getPath());
+		
+		ProblemType problemType = ProblemType.MESSAGE_NOT_READABLE;
+		String detail = String.format("The property '%s' does not exist" + 
+				" Please correct or remove this property and try again.", path);	
+		
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+		
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+	}
+	
+	
+	
 	
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		
-		String path = ex.getPath().stream()
-				.map(ref -> ref.getFieldName())
-				.collect(Collectors.joining("."));
+		String path = joinPath(ex.getPath());
 		
 		ProblemType problemType = ProblemType.MESSAGE_NOT_READABLE;
 		String detail = String.format("The property '%s' received the value '%s'" + 
@@ -142,5 +161,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				.title(problemType.getTitle())
 				.detail(detail);
 	}
+	
+	private String joinPath(List<Reference> references) {
+		return references.stream()
+			.map(ref -> ref.getFieldName())
+			.collect(Collectors.joining("."));
+	}
+	
+	
 
 }
