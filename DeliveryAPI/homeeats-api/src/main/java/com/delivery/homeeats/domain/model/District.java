@@ -5,7 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.Valid;
+import javax.validation.groups.ConvertGroup;
 
+import com.delivery.homeeats.Groups;
+import com.delivery.homeeats.Groups.DistrictId;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,6 +20,8 @@ import lombok.EqualsAndHashCode;
 @Entity
 public class District {
 	
+	
+	@ConvertGroup(from = Default.class, to = Groups.DistrictId.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include

@@ -7,6 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.ConvertGroup;
+
+import com.delivery.homeeats.Groups;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +30,9 @@ public class Municipalities {
 	@Column(nullable = false)
 	private String name;
 	
+	@Valid
+	@ConvertGroup(from = Default.class, to = Groups.DistrictId.class)
+	@NotNull
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	private District district;

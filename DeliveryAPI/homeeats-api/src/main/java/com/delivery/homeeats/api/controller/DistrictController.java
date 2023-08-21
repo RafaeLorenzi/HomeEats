@@ -3,6 +3,8 @@ package com.delivery.homeeats.api.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,7 +53,7 @@ public class DistrictController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public District addDistrict(@RequestBody District district) {
+	public District addDistrict(@RequestBody @Valid District district) {
 		try {
 			return districtResgistrationService.addDistrict(district);
 		} catch ( DistrictNotFoundException e) {

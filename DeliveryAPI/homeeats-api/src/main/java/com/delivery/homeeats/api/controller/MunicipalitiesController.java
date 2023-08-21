@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.Mergeable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,7 @@ public class MunicipalitiesController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Municipalities addMunicipalities(@RequestBody Municipalities municipalities) {
+	public Municipalities addMunicipalities(@RequestBody @Valid Municipalities municipalities) {
 		try {
 			return municipalitiesRegistrationService.addMunicipalities(municipalities);
 		} catch (MunicipalitiesNotFoundException e) {
