@@ -70,7 +70,7 @@ public class KitchenController {
 	
 	
 	@PutMapping("/{kitchenId}")
-	public Kitchen updateKitchen(@PathVariable Long kitchenId, 
+	public Kitchen updateKitchen(@PathVariable  @Valid Long kitchenId, 
 			@RequestBody Kitchen kitchen){
 		Kitchen actualKitchen = kitchenRegistrationService.findOrFail(kitchenId);
 		
