@@ -17,6 +17,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -27,6 +28,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.lang.Nullable;
 
+import com.delivery.homeeats.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -44,18 +46,18 @@ public class Restaurant {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull
-	@NotEmpty
-	@NotBlank
+	
+	@NotBlank(groups = Groups.RestaurantRegister.class)
 	@Column(nullable = false)
 	private String name;
 	
 	//@DecimalMin("0")
-	@PositiveOrZero
+	@PositiveOrZero(groups = Groups.RestaurantRegister.class)
 	@Column(nullable = false)
 	private BigDecimal deliveryFee;
 	
-	@NotNull
+	@Valid
+	@NotNull(groups = Groups.RestaurantRegister.class)
 	@JsonIgnoreProperties("hibernateLazyInitializer")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "kitchen_id", nullable = false)

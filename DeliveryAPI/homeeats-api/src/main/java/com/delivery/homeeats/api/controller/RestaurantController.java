@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.delivery.homeeats.Groups;
 import com.delivery.homeeats.domain.exception.BusinessException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
 import com.delivery.homeeats.domain.exception.RestaurantNotFoundException;
@@ -63,7 +65,7 @@ public class RestaurantController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurant addRestaurant(@RequestBody @Valid Restaurant restaurant) {
+	public Restaurant addRestaurant(@RequestBody @Validated(Groups.RestaurantRegister.class) Restaurant restaurant) {
 		try {
 			return restaurantResgistrationService.addRestaurant(restaurant);
 		} catch (RestaurantNotFoundException e) {

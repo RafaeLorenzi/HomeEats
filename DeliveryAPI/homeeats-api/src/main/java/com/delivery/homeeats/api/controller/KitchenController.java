@@ -5,6 +5,8 @@ import java.net.http.HttpHeaders;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -55,7 +57,7 @@ public class KitchenController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Kitchen addKitchen(@RequestBody Kitchen kitchen) {
+	public Kitchen addKitchen(@RequestBody @Valid Kitchen kitchen) {
 		
 		try {
 			return kitchenRegistrationService.addKitchen(kitchen);
