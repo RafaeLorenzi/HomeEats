@@ -55,6 +55,7 @@ public class KitchenController {
 		
 	}
 	
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Kitchen addKitchen(@RequestBody @Valid Kitchen kitchen) {

@@ -26,7 +26,7 @@ import lombok.EqualsAndHashCode;
 public class Kitchen {
 	
 	@Valid
-	@NotNull(groups = Groups.RestaurantRegister.class)
+	@NotNull(groups = Groups.KitchenId.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

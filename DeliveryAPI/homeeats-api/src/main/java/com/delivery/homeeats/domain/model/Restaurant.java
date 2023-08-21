@@ -23,6 +23,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -31,6 +32,7 @@ import org.springframework.lang.Nullable;
 import com.delivery.homeeats.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,21 +45,22 @@ public class Restaurant {
 	
 	@EqualsAndHashCode.Include
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	private Long id;
 	
 	
-	@NotBlank(groups = Groups.RestaurantRegister.class)
+	@NotBlank
 	@Column(nullable = false)
 	private String name;
 	
 	//@DecimalMin("0")
-	@PositiveOrZero(groups = Groups.RestaurantRegister.class)
+	@PositiveOrZero
 	@Column(nullable = false)
 	private BigDecimal deliveryFee;
 	
 	@Valid
-	@NotNull(groups = Groups.RestaurantRegister.class)
+	@ConvertGroup(from = Default.class, to = Groups.KitchenId.class)
+	@NotNull
 	@JsonIgnoreProperties("hibernateLazyInitializer")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "kitchen_id", nullable = false)
