@@ -49,7 +49,7 @@ public class Restaurant {
 	private Long id;
 	
 	
-	@NotBlank
+	@NotBlank(message = "The name is mandatory")
 	@Column(nullable = false)
 	private String name;
 	
