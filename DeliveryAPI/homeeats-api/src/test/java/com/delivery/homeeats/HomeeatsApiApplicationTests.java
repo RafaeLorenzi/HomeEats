@@ -12,6 +12,8 @@ import org.springframework.boot.sql.init.dependency.AbstractBeansOfTypeDatabaseI
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.delivery.homeeats.domain.exception.EntityInUseException;
+import com.delivery.homeeats.domain.exception.KitchenNotFoundException;
 import com.delivery.homeeats.domain.model.Kitchen;
 import com.delivery.homeeats.domain.model.service.KitchenRegistrationService;
 
@@ -23,7 +25,7 @@ class RegisterKitchenIntegrationTests {
 	private KitchenRegistrationService kitchenRegistrationService;
 	
 	@Test
-	public void testKitchenRegisterSuccess () {
+	public void  shouldAtributeAId_WhenKitchenRegisterWithCorrectData () {
 		//Scenario
 		Kitchen newKitchen = new Kitchen();
 		newKitchen.setName("chinese");
@@ -38,7 +40,7 @@ class RegisterKitchenIntegrationTests {
 	}
 	
 	@org.junit.Test ( expected = ConstraintViolationException.class)
-	public void mostFailRegisterKitchen_withoutName() {
+	public void  shouldFail_WhenRegisterKitchenWithoutName() {
 		
 		//Scenario
 		Kitchen newKitchen = new Kitchen();
@@ -46,9 +48,18 @@ class RegisterKitchenIntegrationTests {
 		
 		//Action
 		newKitchen = kitchenRegistrationService.addKitchen(newKitchen);
+			
 		
-
-		
+	}
+	
+	@org.junit.Test( expected = EntityInUseException.class)
+	public void shouldFail_WhenDeleteKitchenInUse() {
+		kitchenRegistrationService.remove(1L);
+	}
+	
+	@org.junit.Test(expected = KitchenNotFoundException.class)
+	public void mostFail_WhenDeleteKitchenNotFound() {
+		kitchenRegistrationService.remove(100L);
 		
 	}
 
