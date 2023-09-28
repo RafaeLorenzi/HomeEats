@@ -1,7 +1,8 @@
-package com.delivery.homeeats.domain.model.service;
+package com.delivery.homeeats.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
 import com.delivery.homeeats.domain.exception.RestaurantNotFoundException;
@@ -21,6 +22,7 @@ public class RestaurantResgistrationService {
 	@Autowired
 	private KitchenRegistrationService kitchenRegistrationService;
 	
+	@Transactional
 	public Restaurant addRestaurant(Restaurant restaurant) {
 		Long kitchenId = restaurant.getKitchen().getId();
 		

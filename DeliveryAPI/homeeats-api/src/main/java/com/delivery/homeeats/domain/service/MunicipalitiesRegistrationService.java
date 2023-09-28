@@ -1,10 +1,11 @@
-package com.delivery.homeeats.domain.model.service;
+package com.delivery.homeeats.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
@@ -29,6 +30,7 @@ public class MunicipalitiesRegistrationService {
 	@Autowired
 	private DistrictResgistrationService districtResgistrationService;
 	
+	@Transactional
 	public Municipalities addMunicipalities(Municipalities municipalities) {
 		Long districtId = municipalities.getDistrict().getId();
 		
@@ -44,6 +46,7 @@ public class MunicipalitiesRegistrationService {
 		return municipalitiesRepository.save(municipalities);
 	}
 	
+	@Transactional
 	public void deleteMunicipalitie(Long municipalitiesId) {
 		try {
 			municipalitiesRepository.deleteById(municipalitiesId);

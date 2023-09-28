@@ -1,9 +1,10 @@
-package com.delivery.homeeats.domain.model.service;
+package com.delivery.homeeats.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.delivery.homeeats.domain.exception.DistrictNotFoundException;
 import com.delivery.homeeats.domain.exception.EntityInUseException;
@@ -21,10 +22,12 @@ public class DistrictResgistrationService {
 	@Autowired
 	private DistrictRepository districtRepository;
 	
+	@Transactional
 	public District addDistrict(District district) {
 		return districtRepository.save(district);
 	}
 	
+	@Transactional
 	public void remove(Long districtId) {
 		try {
 			districtRepository.deleteById(districtId);
