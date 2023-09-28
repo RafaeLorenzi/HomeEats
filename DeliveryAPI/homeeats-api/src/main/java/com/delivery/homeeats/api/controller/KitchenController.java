@@ -2,6 +2,7 @@ package com.delivery.homeeats.api.controller;
 
 import java.net.http.HttpHeaders;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +30,7 @@ import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
 import com.delivery.homeeats.domain.exception.KitchenNotFoundException;
 import com.delivery.homeeats.domain.model.Kitchen;
-import com.delivery.homeeats.domain.model.service.KitchenRegistrationService;
+import com.delivery.homeeats.domain.service.KitchenRegistrationService;
 import com.delivery.homeeats.domain.repository.KitchenRepository;
 
 @RestController

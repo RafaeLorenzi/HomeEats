@@ -1,6 +1,7 @@
 package com.delivery.homeeats.api.controller;
 
 import java.util.List;
+
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -24,7 +25,7 @@ import com.delivery.homeeats.domain.exception.DistrictNotFoundException;
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
 import com.delivery.homeeats.domain.model.District;
-import com.delivery.homeeats.domain.model.service.DistrictResgistrationService;
+import com.delivery.homeeats.domain.service.DistrictResgistrationService;
 import com.delivery.homeeats.domain.repository.DistrictRepository;
 
 @RestController

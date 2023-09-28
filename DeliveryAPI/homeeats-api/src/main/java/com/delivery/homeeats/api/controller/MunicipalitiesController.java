@@ -1,6 +1,7 @@
 package com.delivery.homeeats.api.controller;
 
 import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,7 +31,7 @@ import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
 import com.delivery.homeeats.domain.exception.MunicipalitiesNotFoundException;
 import com.delivery.homeeats.domain.model.Municipalities;
-import com.delivery.homeeats.domain.model.service.MunicipalitiesRegistrationService;
+import com.delivery.homeeats.domain.service.MunicipalitiesRegistrationService;
 import com.delivery.homeeats.domain.repository.MunicipalitiesRepository;
 
 @RestController

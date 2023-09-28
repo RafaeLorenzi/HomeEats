@@ -1,6 +1,7 @@
 package com.delivery.homeeats.api.controller;
 
 import java.lang.reflect.Field;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,8 +34,8 @@ import com.delivery.homeeats.domain.exception.BusinessException;
 import com.delivery.homeeats.domain.exception.EntityNotExistException;
 import com.delivery.homeeats.domain.exception.RestaurantNotFoundException;
 import com.delivery.homeeats.domain.model.Restaurant;
-import com.delivery.homeeats.domain.model.service.DistrictResgistrationService;
-import com.delivery.homeeats.domain.model.service.RestaurantResgistrationService;
+import com.delivery.homeeats.domain.service.DistrictResgistrationService;
+import com.delivery.homeeats.domain.service.RestaurantResgistrationService;
 import com.delivery.homeeats.domain.repository.RestaurantRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;

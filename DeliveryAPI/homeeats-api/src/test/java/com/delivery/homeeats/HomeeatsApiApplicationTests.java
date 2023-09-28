@@ -1,6 +1,7 @@
 package com.delivery.homeeats;
 
 import static io.restassured.RestAssured.given;
+
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
@@ -26,7 +27,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.delivery.homeeats.domain.exception.EntityInUseException;
 import com.delivery.homeeats.domain.exception.KitchenNotFoundException;
 import com.delivery.homeeats.domain.model.Kitchen;
-import com.delivery.homeeats.domain.model.service.KitchenRegistrationService;
+import com.delivery.homeeats.domain.service.KitchenRegistrationService;
 import com.delivery.homeeats.domain.repository.KitchenRepository;
 import com.delivery.homeeats.util.DatabaseCleaner;
 import com.delivery.homeeats.util.ResourceUtils;
